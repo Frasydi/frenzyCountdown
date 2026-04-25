@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanpa Wajah Nyata | Countdown</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-top: #0d111b;
+            --bg-bottom: #1b2231;
+            --panel: rgba(244, 239, 233, 0.08);
+            --panel-strong: rgba(244, 239, 233, 0.12);
+            --text: #f3ede6;
+            --muted: #b6aea7;
+            --accent: #d1a889;
+            --accent-soft: #8f6f60;
+            --line: rgba(255, 255, 255, 0.12);
+            --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: "Manrope", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(209, 168, 137, 0.14), transparent 32%),
+                radial-gradient(circle at 85% 15%, rgba(143, 111, 96, 0.18), transparent 22%),
+                linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: auto;
+            border-radius: 999px;
+            filter: blur(80px);
+            pointer-events: none;
+            opacity: 0.55;
+        }
+
+        body::before {
+            width: 240px;
+            height: 240px;
+            left: -70px;
+            bottom: 18%;
+            background: rgba(209, 168, 137, 0.12);
+        }
+
+        body::after {
+            width: 280px;
+            height: 280px;
+            right: -90px;
+            top: 8%;
+            background: rgba(140, 155, 182, 0.1);
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 28px;
+            display: grid;
+            place-items: center;
+        }
+
+        .card {
+            width: min(1040px, 100%);
+            padding: 32px;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(18px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 35%),
+                linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.18));
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 20px rgba(209, 168, 137, 0.7);
+        }
+
+        .hero {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 28px;
+            margin-top: 22px;
+            z-index: 1;
+        }
+
+        .copy h1 {
+            margin: 18px 0 8px;
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(3.5rem, 7vw, 6.3rem);
+            line-height: 0.94;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+        }
+
+        .copy p {
+            max-width: 620px;
+            margin: 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+            line-height: 1.85;
+        }
+
+        .meta {
+            margin-top: 26px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .meta-chip {
+            padding: 12px 16px;
+            border-radius: 18px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            color: var(--text);
+        }
+
+        .meta-chip strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+        }
+
+        .side-note {
+            align-self: end;
+            padding: 24px;
+            border-radius: 24px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.08));
+            border: 1px solid var(--line);
+        }
+
+        .side-note h2 {
+            margin: 0 0 12px;
+            font-family: "Cormorant Garamond", serif;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .side-note p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .countdown-wrap {
+            position: relative;
+            z-index: 1;
+            margin-top: 28px;
+            display: grid;
+            gap: 16px;
+        }
+
+        .countdown-title {
+            margin: 0;
+            font-size: 0.88rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .countdown {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .time-box {
+            padding: 22px 18px;
+            border-radius: 22px;
+            background: var(--panel-strong);
+            border: 1px solid var(--line);
+            text-align: center;
+        }
+
+        .time-box .value {
+            display: block;
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(2.7rem, 5vw, 4rem);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .time-box .label {
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-size: 0.75rem;
+        }
+
+        .footer-note {
+            margin-top: 18px;
+            color: var(--muted);
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+        }
+
+        .footer-note strong {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        @media (max-width: 860px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .countdown {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 520px) {
+            .page {
+                padding: 16px;
+            }
+
+            .card {
+                padding: 22px;
+                border-radius: 24px;
+            }
+
+            .copy p,
+            .side-note p {
+                font-size: 0.97rem;
+                line-height: 1.75;
+            }
+
+            .countdown {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="card">
+            <div class="eyebrow">Countdown Peringatan</div>
+
+            <div class="hero">
+                <div class="copy">
+                    <h1>Tanpa Wajah Nyata</h1>
+                    <p>
+                        Sebuah hitung mundur untuk memperingati hadirnya lagu ini buat Frenzy.
+                        Nuansanya sengaja dibuat tenang, sedikit muram, dan pelan-pelan hangat
+                        menjelang <strong>8 Mei 2026</strong>.
+                    </p>
+
+                    <div class="meta">
+                        <div class="meta-chip">
+                            <strong>Tanggal</strong>
+                            8 Mei 2026
+                        </div>
+                        <div class="meta-chip">
+                            <strong>Untuk</strong>
+                            Frenzy
+                        </div>
+                        <div class="meta-chip">
+                            <strong>Vibe</strong>
+                            Sad, intimate, reflective
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="side-note">
+                    <h2>Pelan menuju hari itu</h2>
+                    <p>
+                        Bukan countdown yang ramai, tapi yang terasa seperti malam panjang:
+                        sunyi, lembut, dan menyimpan sesuatu yang penting di ujung tanggal.
+                    </p>
+                </aside>
+            </div>
+
+            <div class="countdown-wrap">
+                <p class="countdown-title">Menuju 08.05.2026</p>
+                <div class="countdown" id="countdown">
+                    <div class="time-box">
+                        <span class="value" id="days">00</span>
+                        <span class="label">Hari</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="value" id="hours">00</span>
+                        <span class="label">Jam</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="value" id="minutes">00</span>
+                        <span class="label">Menit</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="value" id="seconds">00</span>
+                        <span class="label">Detik</span>
+                    </div>
+                </div>
+                <p class="footer-note" id="status-text">
+                    Menghitung waktu menuju momen yang akan dikenang <strong>Frenzy</strong>.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const targetDate = new Date("2026-05-08T00:00:00+08:00").getTime();
+        const daysEl = document.getElementById("days");
+        const hoursEl = document.getElementById("hours");
+        const minutesEl = document.getElementById("minutes");
+        const secondsEl = document.getElementById("seconds");
+        const statusTextEl = document.getElementById("status-text");
+
+        function pad(value) {
+            return String(value).padStart(2, "0");
+        }
+
+        function updateCountdown() {
+            const now = Date.now();
+            const distance = targetDate - now;
+
+            if (distance <= 0) {
+                daysEl.textContent = "00";
+                hoursEl.textContent = "00";
+                minutesEl.textContent = "00";
+                secondsEl.textContent = "00";
+                statusTextEl.innerHTML = "Hari itu sudah tiba. <strong>Tanpa Wajah Nyata</strong> kini menjadi bagian dari kenangan Frenzy.";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((distance / (1000 * 60)) % 60);
+            const seconds = Math.floor((distance / 1000) % 60);
+
+            daysEl.textContent = pad(days);
+            hoursEl.textContent = pad(hours);
+            minutesEl.textContent = pad(minutes);
+            secondsEl.textContent = pad(seconds);
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
